@@ -12,18 +12,18 @@ namespace StateMachineStates {
 		}
 
 		protected override void OnEnter() {
-			target.Input.Movement.canceled += OnCancelMovementInput;
+			input.PlayerActions.Movement.canceled += OnCancelMovementInput;
 		}
 
 		protected override void OnFixedUpdateRun() {
-			Vector2 movementInput = target.Input.Movement.ReadValue<Vector2>();
+			Vector2 movementInput = input.PlayerActions.Movement.ReadValue<Vector2>();
 			movementInput = Vector2.ClampMagnitude(movementInput, 1f);
 			Vector3 movement3D = new Vector3(movementInput.x, 0f, movementInput.y);
 			rigidbodyMover.AddForce(movement3D);
 		}
 
 		private void OnCancelMovementInput(InputAction.CallbackContext obj) {
-			target.Input.Movement.canceled -= OnCancelMovementInput;
+			input.PlayerActions.Movement.canceled -= OnCancelMovementInput;
 			stateMachine.EnterState<PlayerIdlingState>();
 		}
 

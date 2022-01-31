@@ -2,46 +2,75 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
-public class PlayerInteractor {
+//I don't want other scripts to be dependent of this script, but I do want to be able to disable/enable it (do I???)
+//QUESTION: should I detach this script more from the other scripts? If so, how?? 
+//(I don't like delegates & events)
+[RequireComponent(typeof(PlayerInitializer), typeof(PlayerInput))]
+public class PlayerInteractor : MonoBehaviour {
+
+	[SerializeField] private LayerMask interactableLayerMask;
+	[SerializeField] private bool startActive = true;
 
 	private Faction faction;
-	private InputMaster.PlayerActions input;
+	private PlayerInput input;
 
 	private List<ISelectable> selectedThings;
 
-	public PlayerInteractor(InputMaster.PlayerActions playerInput, Faction playerFaction) {
-		input = playerInput;
-		faction = playerFaction;
+	private void Awake() {
 		selectedThings = new List<ISelectable>();
+		input = GetComponent<PlayerInput>();
+		PlayerInitializer controller = GetComponent<PlayerInitializer>();
+		faction = controller.Faction;
+	}
+
+	private void Start() {
+		if (startActive) {
+			Enable();
+		}
+		else {
+			Disable();
+		}
 	}
 
 	public void Enable() {
-		input.Select.performed += OnSelectKeyDown;
-		input.InteractKey.performed += OnInteractKeyDown;
+		input.PlayerActions.Select.performed += OnSelectKeyDown;
+		input.PlayerActions.InteractKey.performed += OnInteractKeyDown;
 	}
 
 	public void Disable() {
-		input.Select.performed -= OnSelectKeyDown;
-		input.InteractKey.performed -= OnInteractKeyDown;
+		input.PlayerActions.Select.performed -= OnSelectKeyDown;
+		input.PlayerActions.InteractKey.performed -= OnInteractKeyDown;
 	}
 
 	private void OnSelectKeyDown(InputAction.CallbackContext context) {
-		Ray mouseRay = Camera.main.ScreenPointToRay(input.MousePosition.ReadValue<Vector2>());
-		if (Physics.Raycast(mouseRay, out RaycastHit hit)) {
-			if (hit.collider != null) {
-				Debug.Log("HIt collider: " + hit.collider.name);
-				selectedThings.Clear();
-				ISelectable selectable = hit.collider.GetComponent<ISelectable>();
-				if (selectable != null) {
-					selectedThings.Add(selectable);
-					selectable.Select(faction);
-				}
+		Collider selectedCollider = GetColliderAtPointerPosition(input.GetPointerPosition());
+		if (selectedCollider != null) { 
+			selectedThings.Clear();
+			ISelectable selectable = selectedCollider.GetComponent<ISelectable>();
+			if (selectable != null) {
+				selectedThings.Add(selectable);
+				selectable.Select(faction);
 			}
 		}
 	}
 
 	private void OnInteractKeyDown(InputAction.CallbackContext context) {
-		Debug.Log("Interact key down!");
+		if (selectedThings.Count == 0) { return; }
+
+		Collider selectedCollider = GetColliderAtPointerPosition(input.GetPointerPosition());
+		if (selectedCollider != null) {
+			IAssignmentTarget assignmentTarget = selectedCollider.GetComponent<IAssignmentTarget>();
+			selectedThings[0].Assign(faction, assignmentTarget);
+		}
+	}
+
+	private Collider GetColliderAtPointerPosition(Vector2 pointerPosition) {
+		Ray pointerRay = Camera.main.ScreenPointToRay(pointerPosition);
+		if (Physics.Raycast(pointerRay, out RaycastHit hit, interactableLayerMask)) {
+			return hit.collider;
+		}
+
+		return null;
 	}
 
 }

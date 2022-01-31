@@ -11,4 +11,8 @@ public class Resource : MonoBehaviour, IInteractable, ISelectable {
 		return new GatherResource(this);
 	}
 
+	public void Assign(Faction _, IAssignmentTarget assignmentTarget) {
+		Debug.Log("I'm just a resource, I won't interact with that silly thing of type " + assignmentTarget.AssignmentType.ToString());
+	}
+
 }
