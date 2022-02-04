@@ -471,6 +471,7 @@ MonoBehaviour:
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 21
+  startActive: 1
 --- !u!4 &165863387
 Transform:
   m_ObjectHideFlags: 0
@@ -585,7 +586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &348728329
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -736,7 +737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startState: {fileID: 504090872}
-  debugLogStateTransitions: 1
+  debugLogStateTransitions: 0
 --- !u!1 &505326293
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,6 +793,8 @@ GameObject:
   m_Component:
   - component: {fileID: 615442467}
   - component: {fileID: 615442466}
+  - component: {fileID: 615442468}
+  - component: {fileID: 615442469}
   m_Layer: 0
   m_Name: Servant
   m_TagString: Untagged
@@ -832,6 +835,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &615442468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615442465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5a167de1801514db14b2e45a160951, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &615442469
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615442465}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.02, z: 0}
 --- !u!1 &621944338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,6 +1162,8 @@ GameObject:
   m_Component:
   - component: {fileID: 803855837}
   - component: {fileID: 803855840}
+  - component: {fileID: 803855839}
+  - component: {fileID: 803855838}
   m_Layer: 0
   m_Name: MinionStates
   m_TagString: Untagged
@@ -1154,6 +1185,33 @@ Transform:
   m_Father: {fileID: 615442467}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &803855838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803855836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c60162a2ecf8da74e86864781230ff89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidbodyMover:
+    movementSpeed: {fileID: 11400000, guid: 813cc26e871688748b907f2e2b66d01d, type: 2}
+  bodyRadius: 1
+--- !u!114 &803855839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803855836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071d1f356aa76784092fdb507d0f3b98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &803855840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1166,8 +1224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78de713ab2bcd8248b6ce39209619ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startState: {fileID: 0}
-  debugLogStateTransitions: 0
+  startState: {fileID: 803855839}
+  debugLogStateTransitions: 1
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,7 +1665,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1769688878
 Rigidbody:
   m_ObjectHideFlags: 0

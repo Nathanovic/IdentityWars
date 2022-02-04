@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 
-//I don't want other scripts to be dependent of this script, but I do want to be able to disable/enable it (do I???)
+//I don't want other scripts to be dependent of this script, but I do want states to be able to disable/enable it (do I???)
 //QUESTION: should I detach this script more from the other scripts? If so, how?? 
 //(I don't like delegates & events)
 [RequireComponent(typeof(PlayerInitializer), typeof(PlayerInput))]
@@ -59,8 +59,11 @@ public class PlayerInteractor : MonoBehaviour {
 
 		Collider selectedCollider = GetColliderAtPointerPosition(input.GetPointerPosition());
 		if (selectedCollider != null) {
-			IAssignmentTarget assignmentTarget = selectedCollider.GetComponent<IAssignmentTarget>();
-			selectedThings[0].Assign(faction, assignmentTarget);
+			IAssignmentTarget assignmentTarget = selectedCollider.GetComponent<ISelectable>().Interact();
+			Debug.Log("Assignment target: " + assignmentTarget);
+			if (assignmentTarget != null) {
+				selectedThings[0].Assign(faction, assignmentTarget);
+			}
 		}
 	}
 

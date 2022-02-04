@@ -4,6 +4,8 @@ using System;
 [Serializable]
 public class MoveRigidbody {
 
+	public Vector3 CurrentPosition { get { return rigidbody.position; } }
+
 	[AssetDropdown("Settings/ScriptableVariables")]
 	[SerializeField] private ScriptableInt movementSpeed;
 

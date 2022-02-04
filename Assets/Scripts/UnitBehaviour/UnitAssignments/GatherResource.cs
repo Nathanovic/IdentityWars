@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class GatherResource : IAssignmentTarget {
+public class GatherResource : MoveAssignment {
 	
-	public Vector3 Position { get { return resource.transform.position; } }
-	public AssignmentType AssignmentType { get { return AssignmentType.GatherResource; } }
+	public Vector3 ResourcePosition { get { return resource.transform.position; } }
 
 	private Resource resource;
 
-	public GatherResource(Resource resource) {
+	public GatherResource(Resource resource) : base(resource.transform.position) {
 		this.resource = resource;
+		AssignmentType = AssignmentType.GatherResource;
 	}
 
 }
