@@ -14,27 +14,50 @@ namespace StateMachineStates {
 		[SerializeField] private MoveRigidbody rigidbodyMover;
 		[SerializeField] private float bodyRadius;// Replace with Scriptable var
 
-		private MoveAssignment moveAssignment;
+		private AssignmentReceiver assignmentReceiver;
+		private MoveAssignment assignment;
 
-		protected override void OnInitialize() {
-			Rigidbody rigidbody = GetComponentInParent<Rigidbody>();
+		public override void Initialize(StateMachine stateMachine, IStateMachineTarget target) {
+			base.Initialize(stateMachine, target);
+			MonoBehaviour targetMonoBehaviour = (MonoBehaviour)target;
+			assignmentReceiver = targetMonoBehaviour.GetComponent<AssignmentReceiver>();
+			Rigidbody rigidbody = targetMonoBehaviour.GetComponent<Rigidbody>();
 			rigidbodyMover.InitializeRigidbody(rigidbody);
 		}
 
+		private void OnAssignmentReceived(IAssignmentTarget assignmentTarget) {
+			MoveAssignment moveAssignment = (MoveAssignment)assignmentTarget;
+			if (moveAssignment != null) {
+				assignment = moveAssignment;
+			}
+		}
+
 		protected override void OnEnter(AIMovingStateData stateData) {
-			moveAssignment = stateData.MoveAssignment;
+			assignmentReceiver.OnAssignmentReceived += OnAssignmentReceived;
+			assignment = stateData.MoveAssignment;
 		}
 
 		protected override void OnFixedUpdateRun() {
-			Vector3 direction = moveAssignment.TargetPosition - rigidbodyMover.CurrentPosition;
+			Vector3 direction = assignment.TargetPosition - rigidbodyMover.CurrentPosition;
+			direction = new Vector3(direction.x, 0f, direction.z);
 			if (direction.magnitude <= bodyRadius) {
-				stateMachine.EnterState<AIIdlingState>();
+				FinishMovingBehaviour();
 				return;
 			}
 
-			direction = Vector3.ClampMagnitude(direction, 1f);
-			Vector3 movement3D = new Vector3(direction.x, 0f, direction.y);
-			rigidbodyMover.AddForce(movement3D);
+			rigidbodyMover.AddForce(direction.normalized);
+		}
+
+		protected override void OnExit() {
+			assignmentReceiver.OnAssignmentReceived -= OnAssignmentReceived;
+		}
+
+		private void FinishMovingBehaviour() {
+			GatherResourceAssignment gatherResourceAssignment = (GatherResourceAssignment)assignment;
+			if (gatherResourceAssignment != null) {
+				Debug.Log("Gather Resource!");
+			}
+			stateMachine.EnterState<AIIdlingState>();
 		}
 
 	}

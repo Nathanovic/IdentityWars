@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 //I don't want other scripts to be dependent of this script, but I do want states to be able to disable/enable it (do I???)
 //QUESTION: should I detach this script more from the other scripts? If so, how?? 
 //(I don't like delegates & events)
+//Also, should I detach StateMachine further?
 [RequireComponent(typeof(PlayerInitializer), typeof(PlayerInput))]
 public class PlayerInteractor : MonoBehaviour {
 
@@ -44,7 +45,7 @@ public class PlayerInteractor : MonoBehaviour {
 
 	private void OnSelectKeyDown(InputAction.CallbackContext context) {
 		Collider selectedCollider = GetColliderAtPointerPosition(input.GetPointerPosition());
-		if (selectedCollider != null) { 
+		if (selectedCollider != null) {
 			selectedThings.Clear();
 			ISelectable selectable = selectedCollider.GetComponent<ISelectable>();
 			if (selectable != null) {

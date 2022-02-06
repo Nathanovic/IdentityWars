@@ -8,7 +8,7 @@ public class Resource : MonoBehaviour, IInteractable, ISelectable {
 
 	public IAssignmentTarget Interact() {
 		Debug.Log("Interacting with resource " + transform.name);
-		return new GatherResource(this);
+		return new GatherResourceAssignment(this);
 	}
 
 	public void Assign(Faction _, IAssignmentTarget assignmentTarget) {

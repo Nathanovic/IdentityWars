@@ -19,8 +19,9 @@ namespace StateMachineStates {
 		}
 
 		private void OnAssignmentReceived(IAssignmentTarget assignmentTarget) {
+
+
 			MoveAssignment moveAssignment = (MoveAssignment)assignmentTarget;
-			Debug.Log("Idle state received state of type " + assignmentTarget.AssignmentType.ToString());
 			if (moveAssignment != null) {
 				AIMovingState.AIMovingStateData movingStateData = new AIMovingState.AIMovingStateData(moveAssignment);
 				stateMachine.EnterState<AIMovingState, AIMovingState.AIMovingStateData>(movingStateData);

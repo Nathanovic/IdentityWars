@@ -12,8 +12,11 @@ public class PlayerInput : MonoBehaviour {
 		PlayerActions.Enable();
 	}
 
+	public void Disable() {
+
+	}
+
 	public Vector2 GetPointerPosition() {
-		Debug.Log("Lalala");
 		return inputService.GetPointerPosition();
 	}
 
