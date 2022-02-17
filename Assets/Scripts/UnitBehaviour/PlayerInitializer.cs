@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayerInitializer : MonoBehaviour, IStateMachineTarget {
+public class PlayerInitializer : MonoBehaviour, IStateMachineTarget, IFactionHolder {
 
 	public Faction Faction { get { return faction; } }
 

@@ -20,8 +20,7 @@ public class PlayerInteractor : MonoBehaviour {
 	private void Awake() {
 		selectedThings = new List<ISelectable>();
 		input = GetComponent<PlayerInput>();
-		PlayerInitializer controller = GetComponent<PlayerInitializer>();
-		faction = controller.Faction;
+		faction = GetComponent<IFactionHolder>().Faction;
 	}
 
 	private void Start() {
@@ -59,13 +58,10 @@ public class PlayerInteractor : MonoBehaviour {
 		if (selectedThings.Count == 0) { return; }
 
 		Collider selectedCollider = GetColliderAtPointerPosition(input.GetPointerPosition());
-		if (selectedCollider != null) {
-			IAssignmentTarget assignmentTarget = selectedCollider.GetComponent<ISelectable>().Interact();
-			Debug.Log("Assignment target: " + assignmentTarget);
-			if (assignmentTarget != null) {
-				selectedThings[0].Assign(faction, assignmentTarget);
-			}
-		}
+		if (selectedCollider == null) { return; }
+		Assignable assignable = selectedCollider.GetComponent<Assignable>();
+		if (assignable == null) { return; }
+		selectedThings[0].Assign(faction, assignable.AssignmentTargetType, assignable.AssignmentTarget);
 	}
 
 	private Collider GetColliderAtPointerPosition(Vector2 pointerPosition) {

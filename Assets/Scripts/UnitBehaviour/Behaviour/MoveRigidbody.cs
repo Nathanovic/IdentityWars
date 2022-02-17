@@ -6,8 +6,7 @@ public class MoveRigidbody {
 
 	public Vector3 CurrentPosition { get { return rigidbody.position; } }
 
-	[AssetDropdown("Settings/ScriptableVariables")]
-	[SerializeField] private ScriptableInt movementSpeed;
+	[SerializeField] private float moveSpeed = 100;
 
 	private Rigidbody rigidbody;
 
@@ -16,7 +15,7 @@ public class MoveRigidbody {
 	}
 
 	public void AddForce(Vector3 input) {
-		Vector3 movementForce = input * movementSpeed.DefaultValue;
+		Vector3 movementForce = input * moveSpeed;
 		rigidbody.AddForce(movementForce);
 	}
 
