@@ -36,7 +36,7 @@ public class GatherResource : FiniteBehaviour {
 			return;
 		}
 
-		inventory.AddItem(collectedResource);
+		inventory.Add(collectedResource);
 		if (inventory.RemainingSpace == 0) {
 			Finish();
 			return;
