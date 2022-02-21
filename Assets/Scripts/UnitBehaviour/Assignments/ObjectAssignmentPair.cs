@@ -7,7 +7,7 @@ public class ObjectAssignmentPair {
 	public State State { get { return state; } }
 
 	[SerializeField] private AssignmentTargetType assignmentTargetType;
-	[SerializeField] private FactionMatch factionMatch;//TODO: make enum FactionMatch instead
+	[SerializeField] private FactionMatch factionMatch;
 	[SerializeField] private State state;
 
 	public bool CanAssign(FactionMatch match, AssignmentTargetType assignmentTargetType) {

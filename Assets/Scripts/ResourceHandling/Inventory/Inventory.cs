@@ -17,29 +17,47 @@ public class Inventory : MonoBehaviour {
 		containedItems = new Dictionary<InventoryItem, int>();
 	}
 
-	public void Add(InventoryItem item) {
+	public void TransferAllTo(Inventory targetInventory) {
+		TransferAllTo<InventoryItem>(targetInventory);
+	}
+
+	public void TransferAllTo<T>(Inventory targetInventory) where T : InventoryItem {
+		Dictionary<T, int> removeableItems = new Dictionary<T, int>();
+		foreach(KeyValuePair<InventoryItem, int> itemKVP in containedItems) {
+			T castedItem = (T)itemKVP.Key;
+			if (castedItem == null) { continue; }
+			targetInventory.Add(itemKVP.Key, itemKVP.Value);
+			removeableItems.Add((T)itemKVP.Key, itemKVP.Value);
+		}
+
+		foreach(KeyValuePair<T, int> itemKVP in removeableItems) {
+			Remove(itemKVP.Key, itemKVP.Value);
+		}
+	}
+
+	public void Add(InventoryItem item, int amount = 1) {
 		if (containedItems.ContainsKey(item)) {
-			containedItems[item] += 1;
+			containedItems[item] += amount;
 		}
 		else {
-			containedItems.Add(item, 1);
+			containedItems.Add(item, amount);
 		}
 
-		RemainingSpace--;
+		RemainingSpace -= amount;
 		OnChanged?.Invoke();
 	}
 
-	public void Remove(InventoryItem item, int count = 1) {
+	public void Remove(InventoryItem item, int amount = 1) {
 		if (!containedItems.ContainsKey(item)) { return; }
 
-		containedItems[item] -= count;
-		RemainingSpace -= count;
+		containedItems[item] -= amount;
+		RemainingSpace += amount;
 		OnChanged?.Invoke();
 	}
 
-	public bool Contains(InventoryItem item, int count = 1) {
+	public bool Contains(InventoryItem item, int amount = 1) {
 		if (!containedItems.ContainsKey(item)) { return false; }
-		return containedItems[item] >= count;
+		return containedItems[item] >= amount;
 	}
 
 	public int ContainedAmount(InventoryItem item) {
@@ -47,7 +65,15 @@ public class Inventory : MonoBehaviour {
 		return containedItems[item];
 	}
 
-	public void RemoveAll() {
+	public bool HasItem() {
+		foreach (KeyValuePair<InventoryItem, int> itemKVP in containedItems) {
+			if (itemKVP.Value > 0) { return true; }
+		}
+
+		return false;
+	}
+
+	private void Clear() {
 		containedItems.Clear();
 		RemainingSpace = maxSpace;
 

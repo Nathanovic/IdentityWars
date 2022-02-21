@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 
 namespace StateMachineStates {
-	public class PlayerDefaultState : PlayerState {
+	public class PlayerDefaultState : State {
 
 		[SerializeField] private MoveRigidbody rigidbodyMover;
 
-		protected override void OnInitialize() {
+		private PlayerInput input;
+
+		public override void Initialize(StateMachine stateMachine, IStateMachineTarget target) {
+			base.Initialize(stateMachine, target);
+			input = target.GetComponent<PlayerInput>();
 			Rigidbody rigidbody = target.GetComponent<Rigidbody>();
 			rigidbodyMover.InitializeRigidbody(rigidbody);
-		}
-
-		protected override void OnEnter() {
 			//input.PlayerActions.Movement.canceled += OnCancelMovementInput;
 		}
 

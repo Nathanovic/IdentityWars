@@ -7,7 +7,6 @@ namespace StateMachineStates {
 
 		public virtual void Initialize(StateMachine stateMachine, IStateMachineTarget target) {
 			this.stateMachine = stateMachine;
-			OnInitialize();
 		}
 
 		public virtual void Enter(IStateData stateData = null) {
@@ -27,7 +26,6 @@ namespace StateMachineStates {
 			OnFixedUpdateRun();
 		}
 
-		protected virtual void OnInitialize() { }
 		protected virtual void OnEnter() { }
 		protected virtual void OnExit() { }
 		protected virtual void OnUpdateRun() { }

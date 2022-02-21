@@ -1,13 +1,9 @@
-using StateMachineStates;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IFactionHolder))]
 public class AssignmentReceiver : MonoBehaviour, ISelectable, IStateMachineTarget {
-
-	//public delegate void OnAssignmentReceivedDelegate(IAssignmentTarget assignmentTarget);
-	//public event OnAssignmentReceivedDelegate OnAssignmentReceived;
 
 	[SerializeField] private List<ObjectAssignmentPair> assignmentDictionary;
 

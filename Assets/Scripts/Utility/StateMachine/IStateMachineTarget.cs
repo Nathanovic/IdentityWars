@@ -1,1 +1,5 @@
-﻿public interface IStateMachineTarget { }
+﻿using UnityEngine;
+
+public interface IStateMachineTarget {
+	public T GetComponent<T>();
+}

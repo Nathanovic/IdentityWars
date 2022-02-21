@@ -1,8 +1,16 @@
 using UnityEngine;
 
-public class AIUnit : MonoBehaviour, IFactionHolder {
-	public Faction Faction { get { return faction; } }
+public class AIUnit : MonoBehaviour, IFactionHolder, IStateMachineTarget {
 
-	[SerializeField] private Faction faction;
+	public Faction Faction { get; private set; }
+	public Vector3 WorldPosition { get { return transform.position; } }
+
+	public void SetFaction(Faction faction) {
+		Faction = faction;
+	}
+
+	public new T GetComponent<T>() {
+		return base.GetComponent<T>();
+	}
 
 }

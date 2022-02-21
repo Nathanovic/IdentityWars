@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fa2f7833a4636240b8d4135fe8147e3, type: 3}
   m_Name: Berry
   m_EditorClassIdentifier: 
-  gatherDuration: 5
+  gatherDuration: 2
   icon: {fileID: 21300000, guid: 92d90bd2ff1e7164f8679a5095f246c5, type: 3}

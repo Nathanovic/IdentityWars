@@ -20,27 +20,31 @@ public class GatherResource : FiniteBehaviour {
 
 		if (time > gatherDuration) {
 			CollectResource();
-			startTime = Time.time;
+
+			if (CanContinueCollecting()) {
+				startTime = Time.time;
+			}
+			else { 
+				Finish();
+			}
 		}
 	}
 
 	private void CollectResource() {
 		InventoryItem collectedResource = resource.GatherResource();
 		if (collectedResource == null) {
-			Finish();
-			return;
-		}
-
-		if (resource.RemainingResources <= 0) {
+			Debug.LogWarning("There is no resource to gain? Finishing gather behaviour...");
 			Finish();
 			return;
 		}
 
 		inventory.Add(collectedResource);
-		if (inventory.RemainingSpace == 0) {
-			Finish();
-			return;
-		}
+	}
+
+	private bool CanContinueCollecting() { 
+		if (inventory.RemainingSpace <= 0) { return false; }
+		if (resource.RemainingResources <= 0) { return false; }
+		return true;
 	}
 
 }
