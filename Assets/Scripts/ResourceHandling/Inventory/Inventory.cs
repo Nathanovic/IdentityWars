@@ -21,20 +21,23 @@ public class Inventory : MonoBehaviour {
 		}
 	}
 
-	public void TransferAllTo(Inventory targetInventory) {
-		TransferAllTo<InventoryItem>(targetInventory);
-	}
+	public void TransferAllTo(Inventory targetInventory, params ItemCategory[] itemCategories) {
+		Dictionary<InventoryItem, int> removeableItems = new Dictionary<InventoryItem, int>();
+		foreach (KeyValuePair<InventoryItem, int> itemKVP in containedItems) {
+			bool isMatchingCategory = false;
+			foreach(ItemCategory category in itemCategories) {
+				if (itemKVP.Key.Category == category) {
+					isMatchingCategory = true;
+					break;
+				}
+			}
+			if (!isMatchingCategory) { break; }
 
-	public void TransferAllTo<T>(Inventory targetInventory) where T : InventoryItem {
-		Dictionary<T, int> removeableItems = new Dictionary<T, int>();
-		foreach(KeyValuePair<InventoryItem, int> itemKVP in containedItems) {
-			T castedItem = (T)itemKVP.Key;
-			if (castedItem == null) { continue; }
 			targetInventory.Add(itemKVP.Key, itemKVP.Value);
-			removeableItems.Add((T)itemKVP.Key, itemKVP.Value);
+			removeableItems.Add(itemKVP.Key, itemKVP.Value);
 		}
 
-		foreach(KeyValuePair<T, int> itemKVP in removeableItems) {
+		foreach (KeyValuePair<InventoryItem, int> itemKVP in removeableItems) {
 			Remove(itemKVP.Key, itemKVP.Value);
 		}
 	}

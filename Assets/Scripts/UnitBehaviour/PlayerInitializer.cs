@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[SelectionBase]
 public class PlayerInitializer : MonoBehaviour, IStateMachineTarget, IFactionHolder {
 
 	public Faction Faction { get; private set; }

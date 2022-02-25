@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[SelectionBase]
 public class ResourceDeliveryPoint : MonoBehaviour, IFactionKnowledgeable, IFactionObject {
 
 	public Vector3 WorldPosition { get { return transform.position; } }
@@ -7,10 +8,12 @@ public class ResourceDeliveryPoint : MonoBehaviour, IFactionKnowledgeable, IFact
 
 	private Inventory factionInventory;
 
+	[AssetDropdown("Settings/Resources/ItemCategories", false)]
+	[SerializeField] private ItemCategory[] itemCategories;
 	[SerializeField] private Collider interactionCollider;
 
-	public void DeliverResources(Inventory inventory) {
-		inventory.TransferAllTo<Resource>(factionInventory);
+	public void DeliverItems(Inventory inventory) {
+		inventory.TransferAllTo(factionInventory, itemCategories);
 	}
 
 	public void InitializeFactionKnowledge(FactionKnowledge factionKnowledge) {

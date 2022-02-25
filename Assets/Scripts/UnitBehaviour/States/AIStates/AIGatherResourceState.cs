@@ -75,7 +75,7 @@ namespace StateMachineStates {
 
 		private void DeliverResources() {
 			Debug.Log("We have arrived at the deposit point!");
-			targetDeliveryPoint.DeliverResources(inventory);
+			targetDeliveryPoint.DeliverItems(inventory);
 
 			if (targetResource.RemainingResources <= 0) {
 				TryCollectingNearbyResource();

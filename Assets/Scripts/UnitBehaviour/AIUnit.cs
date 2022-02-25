@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[SelectionBase]
 public class AIUnit : MonoBehaviour, IFactionHolder, IStateMachineTarget {
 
 	public Faction Faction { get; private set; }

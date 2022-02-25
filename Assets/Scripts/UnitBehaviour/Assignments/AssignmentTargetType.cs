@@ -14,4 +14,5 @@ public class AssignmentTargetType : ScriptableObject {
 
 		return false;
 	}
+
 }
