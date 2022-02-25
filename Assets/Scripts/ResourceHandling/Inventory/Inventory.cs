@@ -2,19 +2,23 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
+[DefaultExecutionOrder(1)]
 public class Inventory : MonoBehaviour {
 
 	public int RemainingSpace { get; private set; }
 	public event Action OnChanged;
 
 	[SerializeField] private int maxSpace;
+	[SerializeField] private InventoryUI ui;
 
 	private Dictionary<InventoryItem, int> containedItems;
 
 	private void Awake() {
 		RemainingSpace = maxSpace;
 		containedItems = new Dictionary<InventoryItem, int>();
+		if (ui != null) {
+			ui.Initialize(this);
+		}
 	}
 
 	public void TransferAllTo(Inventory targetInventory) {
