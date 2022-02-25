@@ -4,7 +4,7 @@ using UnityEngine;
 public class FactionInitializer : MonoBehaviour {
 
 	[SerializeField] private Faction faction;
-	[SerializeField] private FactionResourcesUI resourcesUI;
+	[SerializeField] private InventoryUI resourcesUI;
 	
 	private FactionKnowledge factionKnowledge;
 	private Inventory inventory;
@@ -13,8 +13,7 @@ public class FactionInitializer : MonoBehaviour {
 		inventory = GetComponent<Inventory>();
 		factionKnowledge = new FactionKnowledge(inventory);
 
-		Resource[] availableResources = Resources.LoadAll<Resource>("InventoryItems");
-		resourcesUI.Initialize(inventory, availableResources);
+		resourcesUI.Initialize(inventory);
 		transform.name = "Faction_" + faction.ToString();
 
 		// In fact there should be no units or player objects before the game starts, but for (temporary) editor purposes this works

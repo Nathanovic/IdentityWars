@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ResourceWidget : Widget {
+public class ItemWidget : Widget {
 
 	[SerializeField] private TMP_Text amountText;
 	[SerializeField] private Image resourceIcon;

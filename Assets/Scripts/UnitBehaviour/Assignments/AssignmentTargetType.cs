@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AssignmentTargetType", order = 100)]
+[CreateAssetMenu(menuName = "Identifiers/Assignment Target Type", fileName = "AssignmentTargetType", order = 50)]
 public class AssignmentTargetType : ScriptableObject {
 
 	[SerializeField] private AssignmentTargetType[] containedTypes;
