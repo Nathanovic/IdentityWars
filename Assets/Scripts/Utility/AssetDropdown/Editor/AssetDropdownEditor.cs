@@ -71,7 +71,7 @@ public class AssetDropdownDrawer : PropertyDrawer
 		if (timeSincePreviousLoad < ASSET_REFRESH_TIME)
 			return;
 
-		System.Type fieldBaseType = GetFieldBaseType(fieldType, assetDropdown.AssetType);
+		System.Type fieldBaseType = GetFieldBaseType(fieldType);
 		List<Object> objects = new List<Object>();
 
 		string[] guids = AssetDatabase.FindAssets("t:" + fieldBaseType.ToString(), new[] { "Assets/" + assetDropdown.AssetLocation });
@@ -86,12 +86,9 @@ public class AssetDropdownDrawer : PropertyDrawer
 		dropdownObjects = objects.ToArray();
 	}
 
-	private System.Type GetFieldBaseType (System.Type fieldType, System.Type selectedFieldType)
+	private System.Type GetFieldBaseType (System.Type fieldType)
 	{
-		if (selectedFieldType != null)
-			return selectedFieldType;
-
-		else if (fieldType.IsArray)
+		if (fieldType.IsArray)
 			return fieldType.GetElementType();
 
 		else if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
