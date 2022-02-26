@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(IFactionHolder))]
-public class AssignmentReceiver : MonoBehaviour, ISelectable, IStateMachineTarget {
+public class AssignmentReceiver : MonoBehaviour, ISelectable {
 
 	[SerializeField] private List<ObjectAssignmentPair> assignmentDictionary;
 
@@ -15,10 +15,6 @@ public class AssignmentReceiver : MonoBehaviour, ISelectable, IStateMachineTarge
 
 	private void Awake() {
 		factionHolder = GetComponent<IFactionHolder>();
-	}
-
-	private void Start() {
-		GetComponentInChildren<StateMachine>().Initialize(this);// Should not be here (temporary solution)
 	}
 
 	public void Select(Faction faction) {

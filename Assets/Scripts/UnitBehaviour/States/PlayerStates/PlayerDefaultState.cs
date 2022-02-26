@@ -12,7 +12,6 @@ namespace StateMachineStates {
 			input = target.GetComponent<PlayerInput>();
 			Rigidbody rigidbody = target.GetComponent<Rigidbody>();
 			rigidbodyMover.InitializeRigidbody(rigidbody);
-			//input.PlayerActions.Movement.canceled += OnCancelMovementInput;
 		}
 
 		protected override void OnFixedUpdateRun() {

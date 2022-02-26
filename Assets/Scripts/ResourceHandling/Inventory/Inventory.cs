@@ -9,6 +9,7 @@ public class Inventory : MonoBehaviour {
 	public event Action OnChanged;
 
 	[SerializeField] private int maxSpace;
+	[StarTooltip("Optional: assign an InventoryUI that will draw the inventory contents")]
 	[SerializeField] private InventoryUI ui;
 
 	private Dictionary<InventoryItem, int> containedItems;

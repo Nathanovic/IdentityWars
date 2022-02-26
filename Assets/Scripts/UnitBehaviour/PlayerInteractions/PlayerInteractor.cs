@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 //QUESTION: should I detach this script more from the other scripts? If so, how?? 
 //(I don't like delegates & events)
 //Also, should I detach StateMachine further?
-[RequireComponent(typeof(PlayerInitializer), typeof(PlayerInput))]
+[RequireComponent(typeof(Unit), typeof(PlayerInput))]
 public class PlayerInteractor : MonoBehaviour {
 
 	[SerializeField] private LayerMask interactableLayerMask;
