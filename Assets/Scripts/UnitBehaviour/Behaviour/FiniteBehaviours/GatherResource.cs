@@ -1,22 +1,34 @@
+using System;
 using UnityEngine;
 
-public class GatherResource : FiniteBehaviour {
-	
-	private DepletableResource resource;
-	private Inventory inventory;
-	private float gatherSpeed;
-	private float startTime;
+public class GatherResource : UnitBehaviour<GatherResource.GatherResourceData> {
 
-	public GatherResource(DepletableResource resource, Inventory inventory, float gatherSpeed = 1f) {
-		this.resource = resource;
-		this.inventory = inventory;
-		this.gatherSpeed = gatherSpeed;
-		startTime = Time.time;
+	public class GatherResourceData {
+		public DepletableResource Resource { get; private set; }
+		public Action OnDoneCallback { get; private set; }
+
+		public GatherResourceData(DepletableResource resource, Action onDone) {
+			Resource = resource;
+			OnDoneCallback = onDone;
+		}
 	}
 
-	public override void Update() {
+	[SerializeField] private float gatherSpeed;
+	[SerializeField] private Inventory inventory;
+
+	private GatherResourceData behaviourData;
+
+	private float startTime;
+
+	protected override void OnStart(GatherResourceData data) {
+		behaviourData = data;
+		startTime = Time.time;
+		animator.SetBool("gather", true);
+	}
+
+	protected override void OnUpdate() {
 		float time = Time.time - startTime;
-		float gatherDuration = resource.GatherDuration / gatherSpeed;
+		float gatherDuration = behaviourData.Resource.GatherDuration / gatherSpeed;
 
 		if (time > gatherDuration) {
 			CollectResource();
@@ -24,16 +36,15 @@ public class GatherResource : FiniteBehaviour {
 			if (CanContinueCollecting()) {
 				startTime = Time.time;
 			}
-			else { 
+			else {
 				Finish();
 			}
 		}
 	}
 
 	private void CollectResource() {
-		InventoryItem collectedResource = resource.GatherResource();
+		InventoryItem collectedResource = behaviourData.Resource.GatherResource();
 		if (collectedResource == null) {
-			Debug.LogWarning("There is no resource to gain? Finishing gather behaviour...");
 			Finish();
 			return;
 		}
@@ -41,10 +52,19 @@ public class GatherResource : FiniteBehaviour {
 		inventory.Add(collectedResource);
 	}
 
-	private bool CanContinueCollecting() { 
+	private bool CanContinueCollecting() {
 		if (inventory.RemainingSpace <= 0) { return false; }
-		if (resource.RemainingResources <= 0) { return false; }
+		if (behaviourData.Resource.RemainingResources <= 0) { return false; }
 		return true;
+	}
+
+	private void Finish() {
+		behaviourData.OnDoneCallback?.Invoke();
+		Stop();
+	}
+
+	protected override void OnStop() {
+		animator.SetBool("gather", false);
 	}
 
 }

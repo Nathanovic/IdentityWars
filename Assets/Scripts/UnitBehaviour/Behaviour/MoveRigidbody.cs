@@ -1,22 +1,34 @@
 using UnityEngine;
-using System;
 
-[Serializable]
-public class MoveRigidbody {
+public abstract class MoveRigidbody<T> : UnitBehaviour<T> {
 
-	public Vector3 CurrentPosition { get { return rigidbody.position; } }
+	public Vector3 CurrentPosition { get { return transform.position; } }
 
-	[SerializeField] private float moveSpeed = 100;
+	private new Transform transform;
+	private new Rigidbody rigidbody;
 
-	private Rigidbody rigidbody;
-
-	public void InitializeRigidbody(Rigidbody rb) {
-		rigidbody = rb;
+	protected override void OnInitialize(Transform transform) {
+		this.transform = transform;
+		rigidbody = transform.GetComponent<Rigidbody>();
 	}
 
-	public void AddForce(Vector3 input) {
-		Vector3 movementForce = input * moveSpeed;
+	public void AddForce(Vector3 input, float speed) {
+		Vector3 movementForce = input * speed;
+		if (animator != null) {
+			animator.SetFloat("moveSpeed", movementForce.magnitude);
+		}
+
 		rigidbody.AddForce(movementForce);
+		
+		Vector3 lookToPosition = transform.position + rigidbody.velocity;
+		lookToPosition = new Vector3(lookToPosition.x, 0f, lookToPosition.z);
+		transform.LookAt(lookToPosition);
+	}
+
+	protected override void OnStop() {
+		if (animator != null) {
+			animator.SetFloat("moveSpeed", 0f);
+		}
 	}
 
 }

@@ -1,7 +1,8 @@
+using StateMachineStates;
 using UnityEngine;
 
 [SelectionBase]
-public class ResourceDeliveryPoint : MonoBehaviour, IFactionKnowledgeable, IFactionObject {
+public class ItemDeliveryPoint : MonoBehaviour, IFactionKnowledgeable, IFactionObject, IStateData {
 
 	public Vector3 WorldPosition { get { return transform.position; } }
 	public Collider Collider { get { return interactionCollider; } }

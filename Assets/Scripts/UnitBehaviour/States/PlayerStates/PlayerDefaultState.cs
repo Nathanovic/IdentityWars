@@ -1,24 +1,43 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace StateMachineStates {
 	public class PlayerDefaultState : State {
 
-		[SerializeField] private MoveRigidbody rigidbodyMover;
+		[SerializeField] private PlayerGatherState gatherstate;
+		[SerializeField] private MoveWithInput inputBasedMovement;
+		[SerializeField] private float moveSpeed;
 
 		private PlayerInput input;
+		private TriggerListener triggerListener;
+		private MoveWithInput.MoveWithInputData moveBehaviourData;
 
 		public override void Initialize(StateMachine stateMachine, IStateMachineTarget target) {
 			base.Initialize(stateMachine, target);
 			input = target.GetComponent<PlayerInput>();
-			Rigidbody rigidbody = target.GetComponent<Rigidbody>();
-			rigidbodyMover.InitializeRigidbody(rigidbody);
+			triggerListener = target.GetComponent<TriggerListener>();
+			moveBehaviourData = new MoveWithInput.MoveWithInputData(GetMovementInput, moveSpeed);
 		}
 
-		protected override void OnFixedUpdateRun() {
-			Vector2 movementInput = input.PlayerActions.Movement.ReadValue<Vector2>();
-			movementInput = Vector2.ClampMagnitude(movementInput, 1f);
-			Vector3 movement3D = new Vector3(movementInput.x, 0f, movementInput.y);
-			rigidbodyMover.AddForce(movement3D);
+		protected override void OnEnter() {
+			input.PlayerActions.Fire.performed += OnFireButton;
+			inputBasedMovement.Start(moveBehaviourData);
+		}
+
+		private void OnFireButton(InputAction.CallbackContext context) {
+			// If there is a resource nearby, we should start gathering this resource
+			DepletableResource resource = triggerListener.GetNearbyComponentOfType<DepletableResource>(true);
+			if (resource != null) {
+				stateMachine.EnterState(gatherstate, resource);
+			}
+		}
+
+		protected override void OnExit() {
+			input.PlayerActions.Fire.performed -= OnFireButton;
+		}
+
+		private Vector2 GetMovementInput() {
+			return input.PlayerActions.Movement.ReadValue<Vector2>();
 		}
 
 	}

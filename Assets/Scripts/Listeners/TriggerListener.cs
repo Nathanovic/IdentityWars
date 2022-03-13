@@ -27,4 +27,37 @@ public class TriggerListener : MonoBehaviour {
 		return intersectingColliders.Contains(collider);
 	}
 
+	public T[] GetNearbyComponentsOfType<T>() where T : MonoBehaviour {
+		List<T> nearbyComponents = new List<T>();
+		
+		foreach (Collider collider in intersectingColliders) {
+			T component = collider.GetComponent<T>();
+			if (component != null) {
+				nearbyComponents.Add(component);
+			}
+		}
+
+		return nearbyComponents.ToArray();
+	}
+
+	public T GetNearbyComponentOfType<T>(bool preferClosest) where T : MonoBehaviour {
+		T[] nearbyComponents = GetNearbyComponentsOfType<T>();
+		
+		if (nearbyComponents.Length == 0) { return null; }
+		if (nearbyComponents.Length == 1 || !preferClosest) { return nearbyComponents[0]; }
+
+		T closestComponent = nearbyComponents[0];
+		float closestDistance = Vector3.Distance(transform.position, nearbyComponents[0].transform.position);
+		for(int i = 1; i < nearbyComponents.Length; i ++) {
+			T component = nearbyComponents[i];
+			float distance = Vector3.Distance(transform.position, component.transform.position);
+			if (distance < closestDistance) {
+				closestDistance = distance;
+				closestComponent = component;
+			}
+		}
+
+		return closestComponent;
+	}
+
 }

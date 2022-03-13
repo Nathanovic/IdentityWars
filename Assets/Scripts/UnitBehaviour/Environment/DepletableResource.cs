@@ -3,7 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class DepletableResource : MonoBehaviour, IAssignmentTarget {
 
-	public Vector3 TargetPosition { get { return transform.position; } }
 	public Collider Collider { get; private set; }
 
 	public int RemainingResources { get { return resourceCount; } }
@@ -14,6 +13,7 @@ public class DepletableResource : MonoBehaviour, IAssignmentTarget {
 	[SerializeField] private GameObject filledVisualsAndCollider;
 
 	public Resource GatherResource() {
+		if (resourceCount <= 0) { return null; }
 		resourceCount--;
 		filledVisualsAndCollider.SetActive(resourceCount > 0);
 		return resource;
