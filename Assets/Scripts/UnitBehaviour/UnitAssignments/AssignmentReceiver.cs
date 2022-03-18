@@ -9,16 +9,23 @@ public class AssignmentReceiver : MonoBehaviour, ISelectable {
 
 	[SerializeField] private StateMachine stateMachine;
 
+	[SerializeField] private GameObject selectionVisuals;
+
 	public IAssignmentTarget CurrentAssignment { get; private set; }
 
 	private IFactionHolder factionHolder;
 
 	private void Awake() {
 		factionHolder = GetComponent<IFactionHolder>();
+		Deselect();
 	}
 
 	public void Select(Faction faction) {
-		Debug.Log("Selected " + transform.name);
+		selectionVisuals.SetActive(true);
+	}
+
+	public void Deselect() {
+		selectionVisuals.SetActive(false);
 	}
 
 	public void Assign(Faction faction, IAssignmentTarget assignmentTarget) {

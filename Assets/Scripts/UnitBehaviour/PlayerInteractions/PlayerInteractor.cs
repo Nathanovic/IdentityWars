@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerInteractor : MonoBehaviour {
 
+	[SerializeField] private LayerMask selectableLayerMask;
 	[SerializeField] private LayerMask interactableLayerMask;
 	[SerializeField] private bool startActive = true;
 
@@ -42,9 +43,10 @@ public class PlayerInteractor : MonoBehaviour {
 	}
 
 	private void OnSelectKeyDown(InputAction.CallbackContext context) {
-		Collider selectedCollider = GetColliderAtPointerPosition(input.GetPointerPosition());
+		ClearSelection();
+
+		Collider selectedCollider = GetColliderAtPointerPosition(selectableLayerMask);
 		if (selectedCollider != null) {
-			selectedThings.Clear();
 			ISelectable selectable = selectedCollider.GetComponent<ISelectable>();
 			if (selectable != null) {
 				selectedThings.Add(selectable);
@@ -56,20 +58,29 @@ public class PlayerInteractor : MonoBehaviour {
 	private void OnInteractKeyDown(InputAction.CallbackContext context) {
 		if (selectedThings.Count == 0) { return; }
 
-		Collider selectedCollider = GetColliderAtPointerPosition(input.GetPointerPosition());
+		Collider selectedCollider = GetColliderAtPointerPosition(interactableLayerMask);
 		if (selectedCollider == null) { return; }
 		Assignable assignable = selectedCollider.GetComponent<Assignable>();
 		if (assignable == null) { return; }
 		selectedThings[0].Assign(faction, assignable.AssignmentTargetType, assignable.AssignmentTarget);
 	}
 
-	private Collider GetColliderAtPointerPosition(Vector2 pointerPosition) {
+	private Collider GetColliderAtPointerPosition(LayerMask layerMask) {
+		Vector2 pointerPosition = input.GetPointerPosition();
 		Ray pointerRay = Camera.main.ScreenPointToRay(pointerPosition);
-		if (Physics.Raycast(pointerRay, out RaycastHit hit, interactableLayerMask)) {
+		if (Physics.Raycast(pointerRay, out RaycastHit hit, 100f, layerMask)) {
 			return hit.collider;
 		}
 
 		return null;
+	}
+
+	private void ClearSelection() {
+		foreach(ISelectable selectable in selectedThings) {
+			selectable.Deselect();
+		}
+
+		selectedThings.Clear();
 	}
 
 }
