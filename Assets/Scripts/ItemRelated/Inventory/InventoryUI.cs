@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 
 public class InventoryUI : MonoBehaviour {
 
