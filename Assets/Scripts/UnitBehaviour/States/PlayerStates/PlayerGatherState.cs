@@ -21,11 +21,11 @@ namespace StateMachineStates {
 			}
 
 			GatherResource.GatherResourceData behaviourData = new GatherResource.GatherResourceData(resource, OnFinishedGathering);
-			gatherBehaviour.Start(behaviourData);
+			gatherBehaviour.StartBehaviour(behaviourData);
 		}
 
 		protected override void OnExit() {
-			gatherBehaviour.Stop();
+			gatherBehaviour.StopBehaviour();
 		}
 
 		protected override void OnUpdateRun() {

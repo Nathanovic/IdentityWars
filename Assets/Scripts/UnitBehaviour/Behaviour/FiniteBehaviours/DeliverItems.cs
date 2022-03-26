@@ -31,7 +31,7 @@ public class DeliverItems : UnitBehaviour<DeliverItems.DeliverItemData> {
 		float passedTime = Time.time - startTime;
 		if (passedTime >= deliverDuration) {
 			behaviourData.DeliveryPoint.DeliverItems(behaviourData.Inventory);
-			Stop();
+			StopBehaviour();
 		}
 	}
 

@@ -20,21 +20,21 @@ namespace StateMachineStates {
 
 		protected override void OnEnter(ItemDeliveryPoint deliveryPoint) {
 			this.deliveryPoint = deliveryPoint;
-			moveToPositionBehaviour.Start(deliveryPoint.transform);
+			moveToPositionBehaviour.StartBehaviour(deliveryPoint.transform);
 		}
 
 		protected override void OnUpdateRun() {
 			if (!moveToPositionBehaviour.IsActive) { return; }
 			bool targetReached = triggerListener.IsIntersectingWithCollider(deliveryPoint.Collider);
 			if (targetReached) {
-				moveToPositionBehaviour.Stop();
+				moveToPositionBehaviour.StopBehaviour();
 				DeliverResources();
 			}
 		}
 
 		private void DeliverResources() {
 			DeliverItems.DeliverItemData behaviourData = new DeliverItems.DeliverItemData(inventory, deliveryPoint, OnFinishedDelivery);
-			deliverBehaviour.Start(behaviourData);
+			deliverBehaviour.StartBehaviour(behaviourData);
 		}
 
 		private void OnFinishedDelivery() {

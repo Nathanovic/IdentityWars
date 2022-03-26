@@ -21,7 +21,7 @@ namespace StateMachineStates {
 
 		protected override void OnEnter() {
 			input.PlayerActions.Fire.performed += OnFireButton;
-			inputBasedMovement.Start(moveBehaviourData);
+			inputBasedMovement.StartBehaviour(moveBehaviourData);
 		}
 
 		private void OnFireButton(InputAction.CallbackContext context) {

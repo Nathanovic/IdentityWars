@@ -12,12 +12,12 @@ public abstract class UnitBehaviour<T> : MonoBehaviour, IUnitBehaviour {
 		OnInitialize(transform);
 	}
 
-	public void Start(T data) {
+	public void StartBehaviour(T data) {
 		IsActive = true;
 		OnStart(data);
 	}
 
-	public void Stop() {
+	public void StopBehaviour() {
 		IsActive = false;
 		OnStop();
 	}

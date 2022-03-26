@@ -60,7 +60,7 @@ public class GatherResource : UnitBehaviour<GatherResource.GatherResourceData> {
 
 	private void Finish() {
 		behaviourData.OnDoneCallback?.Invoke();
-		Stop();
+		StopBehaviour();
 	}
 
 	protected override void OnStop() {

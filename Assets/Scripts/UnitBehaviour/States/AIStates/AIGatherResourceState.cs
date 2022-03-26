@@ -37,22 +37,22 @@ namespace StateMachineStates {
 		}
 
 		protected override void OnExit() {
-			gatherBehaviour.Stop();
-			moveToPositionBehaviour.Stop();
+			gatherBehaviour.StopBehaviour();
+			moveToPositionBehaviour.StopBehaviour();
 			base.OnExit();
 		}
 
 		protected override void OnUpdateRun() {
 			if (moveToPositionBehaviour.IsActive) {
 				if (targetResource.RemainingResources <= 0) {
-					moveToPositionBehaviour.Stop();
+					moveToPositionBehaviour.StopBehaviour();
 					TryCollectingNearbyResource();
 					return;
 				}
 
 				bool reachedTargetResource = triggerListener.IsIntersectingWithCollider(targetResource.Collider);
 				if (reachedTargetResource) {
-					moveToPositionBehaviour.Stop();
+					moveToPositionBehaviour.StopBehaviour();
 					GatherTargetResource();
 				}
 			}
@@ -60,12 +60,12 @@ namespace StateMachineStates {
 
 		private void MoveToResource(DepletableResource resource) {
 			targetResource = resource;
-			moveToPositionBehaviour.Start(resource.transform);
+			moveToPositionBehaviour.StartBehaviour(resource.transform);
 		}
 
 		private void GatherTargetResource() {
 			GatherResource.GatherResourceData gatherResourceData = new GatherResource.GatherResourceData(targetResource, OnFinishedCollecting);
-			gatherBehaviour.Start(gatherResourceData);
+			gatherBehaviour.StartBehaviour(gatherResourceData);
 		}
 
 		private void MoveToDeliveryPoint() {
