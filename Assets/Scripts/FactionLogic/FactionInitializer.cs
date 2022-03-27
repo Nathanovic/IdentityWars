@@ -31,4 +31,21 @@ public class FactionInitializer : MonoBehaviour {
 		}
 	}
 
+	public void Initialize(GameObject newFactionObject) {
+		IFactionObject factionObject = newFactionObject.GetComponent<IFactionObject>();
+		if (factionObject != null) {
+			factionKnowledge.AddFactionObject(factionObject);
+		}
+
+		IFactionHolder factionHolder = newFactionObject.GetComponent<IFactionHolder>();
+		if (factionObject != null) {
+			factionHolder.SetFaction(faction);
+		}
+
+		IFactionKnowledgeable factionKnowledgeable = newFactionObject.GetComponent<IFactionKnowledgeable>();
+		if (factionKnowledgeable != null) {
+			factionKnowledgeable.InitializeFactionKnowledge(factionKnowledge);
+		}
+	}
+
 }
