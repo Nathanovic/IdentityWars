@@ -6,7 +6,6 @@ namespace StateMachineStates {
 
 		[SerializeField] private PlayerGatherState gatherstate;
 		[SerializeField] private MoveWithInput inputBasedMovement;
-		[SerializeField] private float moveSpeed;
 
 		private PlayerInput input;
 		private TriggerListener triggerListener;
@@ -16,7 +15,7 @@ namespace StateMachineStates {
 			base.Initialize(stateMachine, target);
 			input = target.GetComponent<PlayerInput>();
 			triggerListener = target.GetComponent<TriggerListener>();
-			moveBehaviourData = new MoveWithInput.MoveWithInputData(GetMovementInput, moveSpeed);
+			moveBehaviourData = new MoveWithInput.MoveWithInputData(GetMovementInput);
 		}
 
 		protected override void OnEnter() {

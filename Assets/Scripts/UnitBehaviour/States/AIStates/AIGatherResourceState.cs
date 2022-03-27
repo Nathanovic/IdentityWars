@@ -2,34 +2,28 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace StateMachineStates {
-	public class AIGatherResourceState : StateWithData<DepletableResource>, IFactionKnowledgeable {
+	public class AIGatherResourceState : GatherState, IFactionKnowledgeable {
 
-		[SerializeField, Required] private AIDefaultState defaultState;
-		[SerializeField, Required] private AIDeliverResourceState deliverResourceState;
 		[SerializeField, Required] private MoveToTarget moveToPositionBehaviour;
-		[SerializeField, Required] private GatherResource gatherBehaviour;
-		
+		[SerializeField, Required] private AIDeliverResourceState deliverResourceState;
+
 		private FactionKnowledge factionKnowledge;
 		private TriggerListener triggerListener;
-		private Inventory inventory;
 
-		private DepletableResource targetResource;
 		private ItemDeliveryPoint targetDeliveryPoint;
 
 		public override void Initialize(StateMachine stateMachine, IStateMachineTarget target) {
 			base.Initialize(stateMachine, target);
 			triggerListener = target.GetComponent<TriggerListener>();
-			inventory = target.GetComponent<Inventory>();
 		}
 
 		public void InitializeFactionKnowledge(FactionKnowledge factionKnowledge) {
 			this.factionKnowledge = factionKnowledge;
 		}
 
-		protected override void OnEnter(DepletableResource resource) {
-			targetResource = resource;
+		protected override void OnEnter() {
 			if (inventory.RemainingSpace > 0) {
-				MoveToResource(resource);
+				MoveToResource(targetResource);
 			}
 			else {
 				MoveToDeliveryPoint();
@@ -37,9 +31,10 @@ namespace StateMachineStates {
 		}
 
 		protected override void OnExit() {
-			gatherBehaviour.StopBehaviour();
-			moveToPositionBehaviour.StopBehaviour();
-			base.OnExit();
+			if (gatherBehaviour != null) {
+				gatherBehaviour.StopBehaviour();
+				moveToPositionBehaviour.StopBehaviour();
+			}
 		}
 
 		protected override void OnUpdateRun() {
@@ -64,7 +59,7 @@ namespace StateMachineStates {
 		}
 
 		private void GatherTargetResource() {
-			GatherResource.GatherResourceData gatherResourceData = new GatherResource.GatherResourceData(targetResource, OnFinishedCollecting);
+			GatherResource.GatherResourceData gatherResourceData = new GatherResource.GatherResourceData(targetResource, OnFinishedGathering);
 			gatherBehaviour.StartBehaviour(gatherResourceData);
 		}
 
@@ -72,7 +67,7 @@ namespace StateMachineStates {
 			targetDeliveryPoint = factionKnowledge.GetClosest<ItemDeliveryPoint>(moveToPositionBehaviour.CurrentPosition);
 			if (targetDeliveryPoint == null) {
 				Debug.LogWarning("There is no delivery point to deliver my resources to!", transform);
-				stateMachine.EnterState(defaultState);
+				EnterDefaultState();
 				return;
 			}
 
@@ -83,10 +78,10 @@ namespace StateMachineStates {
 
 		//TODO: make implementation
 		private void TryCollectingNearbyResource() {
-			stateMachine.EnterState(defaultState);
+			EnterDefaultState();
 		}
 
-		private void OnFinishedCollecting() {
+		private void OnFinishedGathering() {
 			if (inventory.RemainingSpace > 0) {
 				TryCollectingNearbyResource();
 			}

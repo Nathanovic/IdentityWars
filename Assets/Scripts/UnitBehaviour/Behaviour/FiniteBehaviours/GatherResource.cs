@@ -4,37 +4,47 @@ using UnityEngine;
 public class GatherResource : UnitBehaviour<GatherResource.GatherResourceData> {
 
 	public class GatherResourceData {
-		public DepletableResource Resource { get; private set; }
+		public DepletableResource ResourcePile { get; private set; }
+		public Resource Resource { get { return ResourcePile.ResourceType; } }
 		public Action OnDoneCallback { get; private set; }
 
 		public GatherResourceData(DepletableResource resource, Action onDone) {
-			Resource = resource;
+			ResourcePile = resource;
 			OnDoneCallback = onDone;
 		}
 	}
 
-	[SerializeField] private float gatherSpeed;
-	[SerializeField] private Inventory inventory;
+	[AssetDropdown("Settings/Resources/InventoryItems")]
+	[SerializeField] private Resource resourceType;
 
+	private Inventory inventory;
 	private GatherResourceData behaviourData;
 
 	private float startTime;
 
+	public void InitializeInventory(Inventory inventory) {
+		this.inventory = inventory;
+	}
+
+	public bool CanGather(Resource resourceType) {
+		return this.resourceType == resourceType;
+	}
+
 	protected override void OnStart(GatherResourceData data) {
 		behaviourData = data;
-		startTime = Time.time;
 		animator.SetBool("gather", true);
+		StartGatheringNextResource();
 	}
 
 	protected override void OnUpdate() {
 		float time = Time.time - startTime;
-		float gatherDuration = behaviourData.Resource.GatherDuration / gatherSpeed;
+		float gatherDuration = behaviourData.Resource.GatherDuration / skillValue;
 
 		if (time > gatherDuration) {
 			CollectResource();
 
 			if (CanContinueCollecting()) {
-				startTime = Time.time;
+				StartGatheringNextResource();
 			}
 			else {
 				Finish();
@@ -42,8 +52,12 @@ public class GatherResource : UnitBehaviour<GatherResource.GatherResourceData> {
 		}
 	}
 
+	private void StartGatheringNextResource() {
+		startTime = Time.time;
+	}
+
 	private void CollectResource() {
-		InventoryItem collectedResource = behaviourData.Resource.GatherResource();
+		InventoryItem collectedResource = behaviourData.ResourcePile.GatherResource();
 		if (collectedResource == null) {
 			Finish();
 			return;
@@ -54,7 +68,7 @@ public class GatherResource : UnitBehaviour<GatherResource.GatherResourceData> {
 
 	private bool CanContinueCollecting() {
 		if (inventory.RemainingSpace <= 0) { return false; }
-		if (behaviourData.Resource.RemainingResources <= 0) { return false; }
+		if (behaviourData.ResourcePile.RemainingResources <= 0) { return false; }
 		return true;
 	}
 

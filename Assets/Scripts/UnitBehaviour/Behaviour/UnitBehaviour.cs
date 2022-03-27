@@ -5,11 +5,31 @@ using UnityEngine;
 public abstract class UnitBehaviour<T> : MonoBehaviour, IUnitBehaviour {
 
 	public bool IsActive { get; private set; }
-	protected Animator animator { get; private set; }
 
-	public void Initialize(Animator animator, Transform transform) {
+	protected Animator animator { get; private set; }
+	protected new Transform transform { get; private set; }
+	protected new Rigidbody rigidbody { get; private set; }
+	protected UnitSkillSet skillSet { get; private set; }
+	protected int skillValue {
+		get { 
+			return skillSet.GetValue(requiredSkill); 
+		} 
+	}
+
+	[AssetDropdown("Settings/Skills")]
+	[SerializeField] private Skill requiredSkill;
+
+	public void Initialize(Animator animator, Unit unit) {
 		this.animator = animator;
-		OnInitialize(transform);
+		transform = unit.transform;
+		rigidbody = unit.GetComponent<Rigidbody>();
+		skillSet = unit.SkillSet;
+
+		if (requiredSkill != null && !skillSet.HasSkil(requiredSkill)) {
+			Debug.LogWarning("Required skill is not available in unit skillset: " + requiredSkill.name + ", this behaviour will not work: " + name, this);
+			name = name + " (SKILL MISSING)";
+			gameObject.SetActive(false);
+		}
 	}
 
 	public void StartBehaviour(T data) {
@@ -31,7 +51,6 @@ public abstract class UnitBehaviour<T> : MonoBehaviour, IUnitBehaviour {
 		OnFixedUpdate();
 	}
 
-	protected virtual void OnInitialize(Transform transform) { }
 	protected abstract void OnStart(T data);// Potentially later on add OnStart without data and make both optional
 	protected virtual void OnStop() { }
 	protected virtual void OnUpdate() { }

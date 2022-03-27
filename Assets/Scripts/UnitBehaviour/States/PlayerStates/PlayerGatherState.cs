@@ -1,10 +1,7 @@
 using UnityEngine;
 
 namespace StateMachineStates {
-	public class PlayerGatherState : StateWithData<DepletableResource> {
-
-		[SerializeField] private PlayerDefaultState defaultState;
-		[SerializeField] private GatherResource gatherBehaviour;
+	public class PlayerGatherState : GatherState {
 
 		private PlayerInput input;
 
@@ -13,31 +10,32 @@ namespace StateMachineStates {
 			input = target.GetComponent<PlayerInput>();
 		}
 
-		protected override void OnEnter(DepletableResource resource) {
-			if (resource == null) {
-				Debug.LogWarning("Entered PlayerGatherState without resource. Aborting gather process.");
-				stateMachine.EnterState(defaultState);
+		protected override void OnEnter() {
+			if (inventory.RemainingSpace <= 0) {
+				EnterDefaultState();
 				return;
 			}
 
-			GatherResource.GatherResourceData behaviourData = new GatherResource.GatherResourceData(resource, OnFinishedGathering);
+			GatherResource.GatherResourceData behaviourData = new GatherResource.GatherResourceData(targetResource, OnFinishedGathering);
 			gatherBehaviour.StartBehaviour(behaviourData);
 		}
 
 		protected override void OnExit() {
-			gatherBehaviour.StopBehaviour();
+			if (gatherBehaviour != null) {
+				gatherBehaviour.StopBehaviour();
+			}
 		}
 
 		protected override void OnUpdateRun() {
 			Vector2 movementInput = input.PlayerActions.Movement.ReadValue<Vector2>();
 			if (movementInput.magnitude > 0.1f) {
-				stateMachine.EnterState(defaultState);
+				EnterDefaultState();
 				return;
 			}
 		}
 
 		private void OnFinishedGathering() {
-			stateMachine.EnterState(defaultState);
+			EnterDefaultState();
 		}
 
 	}

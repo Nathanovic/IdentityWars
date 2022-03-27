@@ -4,16 +4,8 @@ public abstract class MoveRigidbody<T> : UnitBehaviour<T> {
 
 	public Vector3 CurrentPosition { get { return transform.position; } }
 
-	private new Transform transform;
-	private new Rigidbody rigidbody;
-
-	protected override void OnInitialize(Transform transform) {
-		this.transform = transform;
-		rigidbody = transform.GetComponent<Rigidbody>();
-	}
-
-	public void AddForce(Vector3 input, float speed) {
-		Vector3 movementForce = input * speed;
+	public void AddForce(Vector3 input) {
+		Vector3 movementForce = input * skillValue;
 		animator.SetFloat("moveSpeed", movementForce.magnitude);
 
 		rigidbody.AddForce(movementForce);

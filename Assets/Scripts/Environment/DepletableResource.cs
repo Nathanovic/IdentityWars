@@ -4,9 +4,9 @@ using UnityEngine;
 public class DepletableResource : MonoBehaviour, IAssignmentTarget {
 
 	public Collider Collider { get; private set; }
+	public Resource ResourceType { get { return resource; } }
 
 	public int RemainingResources { get { return resourceCount; } }
-	public float GatherDuration { get { return resource.GatherDuration; } }
 
 	[SerializeField] private int resourceCount;
 	[SerializeField] private Resource resource;
