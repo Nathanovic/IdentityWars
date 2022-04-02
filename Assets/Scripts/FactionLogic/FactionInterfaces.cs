@@ -5,10 +5,6 @@ public interface IFactionObject {
 }
 
 public interface IFactionHolder : IFactionObject {
-	public void SetFaction(Faction faction);
+	public void Initialize(Faction faction, FactionKnowledge factionKnowledge);
 	public Faction Faction { get; }
-}
-
-public interface IFactionKnowledgeable {
-	public void InitializeFactionKnowledge(FactionKnowledge factionKnowledge);
 }

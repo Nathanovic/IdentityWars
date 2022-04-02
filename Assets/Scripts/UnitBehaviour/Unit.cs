@@ -3,8 +3,9 @@
 [SelectionBase]
 public class Unit : MonoBehaviour, IStateMachineTarget, IFactionHolder {
 
-	public Faction Faction { get; private set; }
 	public Vector3 WorldPosition { get { return transform.position; } }
+	public Faction Faction { get; private set; }
+	public FactionKnowledge FactionKnowledge { get; private set; }
 	public UnitSkillSet SkillSet { get { return skillSet; } }
 
 	[SerializeField] private Animator animator;
@@ -22,8 +23,9 @@ public class Unit : MonoBehaviour, IStateMachineTarget, IFactionHolder {
 		}
 	}
 
-	public void SetFaction(Faction faction) {
+	public void Initialize(Faction faction, FactionKnowledge factionKnowledge) {
 		Faction = faction;
+		FactionKnowledge = factionKnowledge;
 	}
 
 }

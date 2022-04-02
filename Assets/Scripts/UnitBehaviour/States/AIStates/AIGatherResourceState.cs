@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace StateMachineStates {
-	public class AIGatherResourceState : GatherState, IFactionKnowledgeable {
+	public class AIGatherResourceState : GatherState {
 
 		[SerializeField, Required] private MoveToTarget moveToPositionBehaviour;
 		[SerializeField, Required] private AIDeliverResourceState deliverResourceState;
@@ -15,10 +15,7 @@ namespace StateMachineStates {
 		public override void Initialize(StateMachine stateMachine, IStateMachineTarget target) {
 			base.Initialize(stateMachine, target);
 			triggerListener = target.GetComponent<TriggerListener>();
-		}
-
-		public void InitializeFactionKnowledge(FactionKnowledge factionKnowledge) {
-			this.factionKnowledge = factionKnowledge;
+			factionKnowledge = target.GetComponent<Unit>().FactionKnowledge;
 		}
 
 		protected override void OnEnter() {
