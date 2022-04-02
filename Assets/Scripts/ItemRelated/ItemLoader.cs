@@ -7,7 +7,7 @@ public class ItemLoader : MonoSingleton<ItemLoader> {
 	private Dictionary<ObjectCategory, ObtainableObject[]> itemLibrary;
 
 	private void Awake() {
-		allObtainableItems = Resources.LoadAll<ObtainableObject>("ObtainableItems");
+		allObtainableItems = Resources.LoadAll<ObtainableObject>("ObtainableObjects");
 		itemLibrary = new Dictionary<ObjectCategory, ObtainableObject[]>();
 	}
 
@@ -37,9 +37,11 @@ public class ItemLoader : MonoSingleton<ItemLoader> {
 	}
 
 	private void LoadItemsIntoLibrary(ObjectCategory category) {
+		if (itemLibrary.ContainsKey(category)) { return; }
+
 		List<ObtainableObject> items = new List<ObtainableObject>();
 		foreach (ObtainableObject item in allObtainableItems) {
-			if (item.Category == category) {
+			if (category.EqualsOrContains(item.Category)) {
 				items.Add(item);
 			}
 		}

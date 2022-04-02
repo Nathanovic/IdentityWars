@@ -29159,7 +29159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062b84efdb095a14e9c784687c303a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAllItemCategories: 0
   itemCategories:
   - {fileID: 11400000, guid: 66a9fa5e71294484eb3ec8f9a3b37280, type: 2}
   resourceWidgetTemplate: {fileID: 1373992763}
@@ -46762,7 +46761,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 062b84efdb095a14e9c784687c303a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAllItemCategories: 1
   itemCategories:
   - {fileID: 11400000, guid: 66a9fa5e71294484eb3ec8f9a3b37280, type: 2}
   - {fileID: 11400000, guid: b5353c89de615dc4fb01e87c5783a951, type: 2}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Shop items/Unit", fileName = "Unit", order = 50)]
+[CreateAssetMenu(menuName = "Obtainable objects/Unit", fileName = "Unit", order = 50)]
 public class UnitShopItem : ShopItem {
 
 	[SerializeField] private Unit prefab;
