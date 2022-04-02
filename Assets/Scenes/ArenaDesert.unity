@@ -42890,7 +42890,6 @@ GameObject:
   - component: {fileID: 1108739580}
   - component: {fileID: 1108739579}
   - component: {fileID: 1108739578}
-  - component: {fileID: 1108739581}
   m_Layer: 0
   m_Name: FactionRed
   m_TagString: Untagged
@@ -42911,6 +42910,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   faction: 1
+  defaultShopUI: {fileID: 0}
 --- !u!114 &1108739579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42944,19 +42944,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1108739581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1108739577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b69090e39bd34c4db2390969a9bd0d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shopUI: {fileID: 0}
 --- !u!1001 &1109786054
 PrefabInstance:
   m_ObjectHideFlags: 0

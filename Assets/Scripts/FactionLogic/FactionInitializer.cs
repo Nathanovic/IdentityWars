@@ -28,6 +28,9 @@ public class FactionInitializer : MonoBehaviour {
 		IFactionKnowledgeable[] knowledgeableFactionHolders = GetComponentsInChildren<IFactionKnowledgeable>();
 		foreach (IFactionKnowledgeable factionHolder in knowledgeableFactionHolders) {
 			factionHolder.InitializeFactionKnowledge(factionKnowledge);
+		Shop[] shops = GetComponentsInChildren<Shop>();
+		foreach (Shop shop in shops) {
+			InitializeShop(shop);
 		}
 	}
 
@@ -36,6 +39,9 @@ public class FactionInitializer : MonoBehaviour {
 		if (factionObject != null) {
 			factionKnowledge.AddFactionObject(factionObject);
 		}
+	public void InitializeShop(Shop shop) {
+		shop.Initialize(factory, defaultShopUI);
+	}
 
 		IFactionHolder factionHolder = newFactionObject.GetComponent<IFactionHolder>();
 		if (factionObject != null) {

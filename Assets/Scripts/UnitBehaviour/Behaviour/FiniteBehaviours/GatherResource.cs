@@ -57,7 +57,7 @@ public class GatherResource : UnitBehaviour<GatherResource.GatherResourceData> {
 	}
 
 	private void CollectResource() {
-		InventoryItem collectedResource = behaviourData.ResourcePile.GatherResource();
+		ObtainableObject collectedResource = behaviourData.ResourcePile.GatherResource();
 		if (collectedResource == null) {
 			Finish();
 			return;

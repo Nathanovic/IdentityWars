@@ -12,21 +12,21 @@ public class Inventory : MonoBehaviour {
 	[StarTooltip("Optional: assign an InventoryUI that will draw the inventory contents")]
 	[SerializeField] private InventoryUI ui;
 
-	private Dictionary<InventoryItem, int> containedItems;
+	private Dictionary<ObtainableObject, int> containedItems;
 
 	private void Awake() {
 		RemainingSpace = maxSpace;
-		containedItems = new Dictionary<InventoryItem, int>();
+		containedItems = new Dictionary<ObtainableObject, int>();
 		if (ui != null) {
 			ui.Initialize(this);
 		}
 	}
 
-	public void TransferAllTo(Inventory targetInventory, params ItemCategory[] itemCategories) {
-		Dictionary<InventoryItem, int> removeableItems = new Dictionary<InventoryItem, int>();
-		foreach (KeyValuePair<InventoryItem, int> itemKVP in containedItems) {
+	public void TransferAllTo(Inventory targetInventory, params ObjectCategory[] itemCategories) {
+		Dictionary<ObtainableObject, int> removeableItems = new Dictionary<ObtainableObject, int>();
+		foreach (KeyValuePair<ObtainableObject, int> itemKVP in containedItems) {
 			bool isMatchingCategory = false;
-			foreach(ItemCategory category in itemCategories) {
+			foreach(ObjectCategory category in itemCategories) {
 				if (itemKVP.Key.Category == category) {
 					isMatchingCategory = true;
 					break;
@@ -38,12 +38,12 @@ public class Inventory : MonoBehaviour {
 			removeableItems.Add(itemKVP.Key, itemKVP.Value);
 		}
 
-		foreach (KeyValuePair<InventoryItem, int> itemKVP in removeableItems) {
+		foreach (KeyValuePair<ObtainableObject, int> itemKVP in removeableItems) {
 			Remove(itemKVP.Key, itemKVP.Value);
 		}
 	}
 
-	public void Add(InventoryItem item, int amount = 1) {
+	public void Add(ObtainableObject item, int amount = 1) {
 		if (containedItems.ContainsKey(item)) {
 			containedItems[item] += amount;
 		}
@@ -55,7 +55,7 @@ public class Inventory : MonoBehaviour {
 		OnChanged?.Invoke();
 	}
 
-	public void Remove(InventoryItem item, int amount = 1) {
+	public void Remove(ObtainableObject item, int amount = 1) {
 		if (!containedItems.ContainsKey(item)) { return; }
 
 		containedItems[item] -= amount;
@@ -63,18 +63,18 @@ public class Inventory : MonoBehaviour {
 		OnChanged?.Invoke();
 	}
 
-	public bool Contains(InventoryItem item, int amount = 1) {
+	public bool Contains(ObtainableObject item, int amount = 1) {
 		if (!containedItems.ContainsKey(item)) { return false; }
 		return containedItems[item] >= amount;
 	}
 
-	public int ContainedAmount(InventoryItem item) {
+	public int ContainedAmount(ObtainableObject item) {
 		if (!containedItems.ContainsKey(item)) { return 0; }
 		return containedItems[item];
 	}
 
 	public bool HasItem() {
-		foreach (KeyValuePair<InventoryItem, int> itemKVP in containedItems) {
+		foreach (KeyValuePair<ObtainableObject, int> itemKVP in containedItems) {
 			if (itemKVP.Value > 0) { return true; }
 		}
 

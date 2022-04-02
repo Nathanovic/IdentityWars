@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Shop : MonoBehaviour {
@@ -12,23 +13,23 @@ public class Shop : MonoBehaviour {
 	// 6 Test & iterate!
 
 	[SerializeField] private Transform spawnPosition;
+	[AssetDropdown("Settings/Resources/ItemCategories", false)]
+	[SerializeField] private List<ObjectCategory> itemCategories;
 
+	private FactionObjectBuilder factory;
 	private ShopUI ui;
-	private Action<ShopItem, Vector3> onObjectBoughtCallback;
-	private Action<ShopItem> onUpgradeBoughtCallback;
+	private Action<UnitShopItem, Vector3> onUnitBoughtCallback;
 
-	//private ShopItem[]
+	private ShopItem[] itemsForSale;
 
-	public void Initialize(ShopUI shopUI, Action<ShopItem, Vector3> onObjectBought, Action<ShopItem> onUpgradeBought) {
+	public void Initialize(FactionObjectBuilder builder, ShopUI shopUI) {// Action<ShopItem> onUpgradeBought) {
+		factory = builder;
 		ui = shopUI;
-		onObjectBoughtCallback = onObjectBought;
-		onUpgradeBoughtCallback = onUpgradeBought;
+
 	}
 
-	private void OnItemSelected(ShopItem shopItem) {
-		if (shopItem.Type == ShopItem.ItemType.Unit) {
-			onObjectBoughtCallback?.Invoke(shopItem, spawnPosition.position);
-		}
+	public void ShowUI() {
+		ui.Show(itemsForSale);
 	}
 
 }

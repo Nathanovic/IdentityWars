@@ -9,8 +9,8 @@ public class ItemDeliveryPoint : MonoBehaviour, IFactionKnowledgeable, IFactionO
 
 	private Inventory factionInventory;
 
-	[AssetDropdown("Settings/Resources/ItemCategories", false)]
-	[SerializeField] private ItemCategory[] itemCategories;
+	[AssetDropdown("Settings/Resources/ObjectCategories/Items", false)]
+	[SerializeField] private ObjectCategory[] itemCategories;
 	[SerializeField] private Collider interactionCollider;
 
 	public void DeliverItems(Inventory inventory) {

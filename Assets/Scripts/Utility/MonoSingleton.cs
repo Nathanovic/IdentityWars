@@ -8,14 +8,13 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
 		get {
 			if (instance == null) {
 				GameObject instanceObject = new GameObject();
-				instanceObject.name = "Input";
+				instanceObject.name = typeof(T).ToString() + "_Singleton";
 				instance = instanceObject.AddComponent<T>();
-				instance.Initialize();
 			}
 			return instance;
 		}
 	}
 
-	protected abstract void Initialize();
+	protected virtual void Initialize() { }
 
 }

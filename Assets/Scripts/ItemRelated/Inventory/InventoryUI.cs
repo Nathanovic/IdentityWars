@@ -1,37 +1,34 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 
 public class InventoryUI : MonoBehaviour {
 
-	[SerializeField] private bool useAllItemCategories;
-	[HideIf("useAllItemCategories")]
-	[AssetDropdown("Settings/Resources/ItemCategories", false)] 
-	[SerializeField] private List<ItemCategory> itemCategories;
+	[AssetDropdown("Settings/Resources/ObjectCategories/Items", false)] 
+	[SerializeField] private ObjectCategory[] itemCategories;
 	[SerializeField] private ItemWidget resourceWidgetTemplate;
 	[SerializeField] private bool showEmptyItems;
 
 	private Inventory inventory;
-	private Dictionary<InventoryItem, ItemWidget> resourceWidgets;
-	private InventoryItem[] availableItems;
+	private Dictionary<ObtainableObject, ItemWidget> resourceWidgets;
+	private ObtainableObject[] availableItems;
 
 	private void Awake() {
 		resourceWidgetTemplate.gameObject.SetActive(false);
 
-		if (itemCategories == null || itemCategories.Count < 1) {
+		if (itemCategories == null || itemCategories.Length < 1) {
 			Debug.LogError("Inventory UI will not work: no item categories specified");
 		}
 	}
 
 	public void Initialize(Inventory inventory) {
-		availableItems = Resources.LoadAll<InventoryItem>("InventoryItems");
+		availableItems = ItemLoader.Instance.GetItemsOfCategory<ObtainableObject>(itemCategories);
 		this.inventory = inventory;
-		resourceWidgets = new Dictionary<InventoryItem, ItemWidget>();
+		resourceWidgets = new Dictionary<ObtainableObject, ItemWidget>();
 		inventory.OnChanged += UpdateVisuals;
 
-		foreach (InventoryItem item in availableItems) {
-			bool isItemOfDesiredCategory = useAllItemCategories || itemCategories.Contains(item.Category);
-			if (!isItemOfDesiredCategory) { continue; }
+		foreach (ObtainableObject item in availableItems) {
+			//bool isItemOfDesiredCategory = useAllItemCategories || itemCategories.Contains(item.Category);
+			//if (!isItemOfDesiredCategory) { continue; }
 
 			ItemWidget newWidget = Instantiate(resourceWidgetTemplate, resourceWidgetTemplate.transform.parent);
 			newWidget.transform.name = "Widget-" + item.name;
@@ -43,7 +40,7 @@ public class InventoryUI : MonoBehaviour {
 	}
 
 	public void UpdateVisuals() {
-		foreach(KeyValuePair<InventoryItem, ItemWidget> widgetKVP in resourceWidgets) {
+		foreach(KeyValuePair<ObtainableObject, ItemWidget> widgetKVP in resourceWidgets) {
 			int amount = inventory.ContainedAmount(widgetKVP.Key);
 			widgetKVP.Value.UpdateAmount(amount);
 

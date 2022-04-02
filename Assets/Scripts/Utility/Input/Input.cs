@@ -2,7 +2,7 @@ public class Input : MonoSingleton<Input> {
 
 	public InputMaster InputMaster { get; private set; }
 
-	protected override void Initialize() {
+	private void Awake() {
 		InputMaster = new InputMaster();
 	}
 
