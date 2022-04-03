@@ -1,25 +1,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemLoader : MonoSingleton<ItemLoader> {
+public class CategorizedObjectLibrary : MonoSingleton<CategorizedObjectLibrary> {
 
-	private ObtainableObject[] allObtainableItems;
-	private Dictionary<ObjectCategory, ObtainableObject[]> itemLibrary;
+	private ObtainableObject[] allObtainableObjects;
+	private Dictionary<ObjectCategory, ObtainableObject[]> library;
 
 	private void Awake() {
-		allObtainableItems = Resources.LoadAll<ObtainableObject>("ObtainableObjects");
-		itemLibrary = new Dictionary<ObjectCategory, ObtainableObject[]>();
+		allObtainableObjects = Resources.LoadAll<ObtainableObject>("ObtainableObjects");
+		library = new Dictionary<ObjectCategory, ObtainableObject[]>();
 	}
 
-	public T[] GetItemsOfCategory<T>(params ObjectCategory[] categories) where T : ObtainableObject {
+	public T[] GetObjects<T>(params ObjectCategory[] categories) where T : ObtainableObject {
+		if (categories.Length == 0) {
+			Debug.LogWarning("Trying to get objects without category, this is not supported!");
+			return null;
+		}
+
 		List<ObtainableObject> items = new List<ObtainableObject>();
 		foreach (ObjectCategory category in categories) {
-			bool isNewCategory = !itemLibrary.ContainsKey(category);
+			bool isNewCategory = !library.ContainsKey(category);
 			if (isNewCategory) {
 				LoadItemsIntoLibrary(category);
 			}
 
-			items.AddRange(itemLibrary[category]);
+			items.AddRange(library[category]);
 		}
 
 		int itemCount = items.Count;
@@ -37,16 +42,16 @@ public class ItemLoader : MonoSingleton<ItemLoader> {
 	}
 
 	private void LoadItemsIntoLibrary(ObjectCategory category) {
-		if (itemLibrary.ContainsKey(category)) { return; }
+		if (library.ContainsKey(category)) { return; }
 
 		List<ObtainableObject> items = new List<ObtainableObject>();
-		foreach (ObtainableObject item in allObtainableItems) {
+		foreach (ObtainableObject item in allObtainableObjects) {
 			if (category.EqualsOrContains(item.Category)) {
 				items.Add(item);
 			}
 		}
 
-		itemLibrary.Add(category, items.ToArray());
+		library.Add(category, items.ToArray());
 	}
 
 }

@@ -21,15 +21,13 @@ public class InventoryUI : MonoBehaviour {
 	}
 
 	public void Initialize(Inventory inventory) {
-		availableItems = ItemLoader.Instance.GetItemsOfCategory<ObtainableObject>(itemCategories);
+		// It would be better if the inventory had a restruction of certain categories instead of the UI
+		availableItems = CategorizedObjectLibrary.Instance.GetObjects<ObtainableObject>(itemCategories);
 		this.inventory = inventory;
 		resourceWidgets = new Dictionary<ObtainableObject, ItemWidget>();
 		inventory.OnChanged += UpdateVisuals;
 
 		foreach (ObtainableObject item in availableItems) {
-			//bool isItemOfDesiredCategory = useAllItemCategories || itemCategories.Contains(item.Category);
-			//if (!isItemOfDesiredCategory) { continue; }
-
 			ItemWidget newWidget = Instantiate(resourceWidgetTemplate, resourceWidgetTemplate.transform.parent);
 			newWidget.transform.name = "Widget-" + item.name;
 			newWidget.Initialize(item.Icon);
