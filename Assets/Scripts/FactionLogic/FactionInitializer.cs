@@ -35,7 +35,7 @@ public class FactionInitializer : MonoBehaviour {
 	}
 
 	public void InitializeShop(Shop shop) {
-		shop.Initialize(factory, defaultShopUI);
+		shop.Initialize(factory, inventory, defaultShopUI);
 	}
 
 	private void OnFactionObjectSpawned(GameObject newFactionObject) {

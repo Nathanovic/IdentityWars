@@ -8,13 +8,20 @@ public class ObjectPool <T> where T : Component {
     private List<T> poolItems;
     private Transform defaultParent;
 
-    public ObjectPool(T prefab, string poolName) {
+    public ObjectPool(T prefab, Transform parent) {
         this.prefab = prefab;
         poolItems = new List<T>();
-        defaultParent = new GameObject(poolName).transform;
+		defaultParent = parent;
     }
 
-    public T GetItem(Transform parent = null, bool isUIElement = false) {
+	public ObjectPool(T prefab) {
+		this.prefab = prefab;
+		poolItems = new List<T>();
+		string poolName = "Pool_" + typeof(T).ToString();
+		defaultParent = new GameObject(poolName).transform;
+	}
+
+	public T GetItem(bool isUIElement = false, Transform parent = null) {
         T item;
 
         if (poolItems.Count > 0) {
@@ -44,4 +51,5 @@ public class ObjectPool <T> where T : Component {
             HideItem(item);
 		}
     }
+
 }

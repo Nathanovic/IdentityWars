@@ -28,10 +28,6 @@ public class AssignmentReceiver : MonoBehaviour, ISelectable {
 		selectionVisuals.SetActive(false);
 	}
 
-	public void Assign(Faction faction, IAssignmentTarget assignmentTarget) {
-		throw new NotImplementedException();
-	}
-
 	public void Assign(Faction assigningFaction, AssignmentTargetType assignmentType, IAssignmentTarget assignmentTarget = null) {
 		FactionMatch factionMatch = GetFactionMatch(assigningFaction);
 		foreach(ObjectAssignmentPair assignmentPair in assignmentDictionary) {

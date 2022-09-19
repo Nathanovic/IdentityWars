@@ -14,22 +14,27 @@ public class Shop : MonoBehaviour {
 
 	[SerializeField] private Transform spawnPosition;
 	[AssetDropdown("Settings/Resources/ItemCategories", false)]
-	[SerializeField] private List<ObjectCategory> itemCategories;
+	[SerializeField] private ObjectCategory[] itemCategories;
 
 	private FactionObjectBuilder factory;
+	private Inventory inventory;
 	private ShopUI ui;
-	private Action<UnitShopItem, Vector3> onUnitBoughtCallback;
 
-	private ShopItem[] itemsForSale;
-
-	public void Initialize(FactionObjectBuilder builder, ShopUI shopUI) {// Action<ShopItem> onUpgradeBought) {
+	public void Initialize(FactionObjectBuilder builder, Inventory inventory, ShopUI shopUI) {// Action<ShopItem> onUpgradeBought) {
 		factory = builder;
+		this.inventory = inventory;
 		ui = shopUI;
-
+		ShopItem[] itemsForSale = CategorizedObjectLibrary.Instance.GetObjects<ShopItem>(itemCategories);
+		Debug.Log("This shop (" + transform.name + ") sales: " + itemsForSale.Length + " items. First = " + itemsForSale[0].name);
 	}
 
-	public void ShowUI() {
-		ui.Show(itemsForSale);
+	public void Open() {
+
+		//ui.InitializeShopItems(itemsForSale);
+	}
+
+	public void Close() {
+
 	}
 
 }

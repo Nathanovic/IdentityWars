@@ -74,7 +74,12 @@ public class AssetDropdownDrawer : PropertyDrawer
 		System.Type fieldBaseType = GetFieldBaseType(fieldType);
 		List<Object> objects = new List<Object>();
 
-		string[] guids = AssetDatabase.FindAssets("t:" + fieldBaseType.ToString(), new[] { "Assets/" + assetDropdown.AssetLocation });
+		string assetLocation = assetDropdown.AssetLocation;
+		if (!assetLocation.StartsWith("Assets/")) {
+			assetLocation = "Assets/" + assetDropdown.AssetLocation;
+		}
+
+		string[] guids = AssetDatabase.FindAssets("t:" + fieldBaseType.ToString(), new[] { assetLocation });
 		foreach (string guid in guids)
 		{
 			string assetPath = AssetDatabase.GUIDToAssetPath(guid);

@@ -14,7 +14,7 @@ public class GatherResource : UnitBehaviour<GatherResource.GatherResourceData> {
 		}
 	}
 
-	[AssetDropdown("Settings/Resources/InventoryItems")]
+	[AssetDropdown("Assets/Settings/Resources/ObtainableObjects/InventoryItems")]
 	[SerializeField] private Resource resourceType;
 
 	private Inventory inventory;
